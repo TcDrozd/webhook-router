@@ -1,0 +1,85 @@
+# Nginx configuration for edge service on Oracle VM
+# Place in /etc/nginx/sites-available/webhook-edge
+# Enable with: ln -s /etc/nginx/sites-available/webhook-edge /etc/nginx/sites-enabled/
+
+upstream webhook_edge {
+    server 127.0.0.1:8080;
+}
+
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name your-domain.com;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+# HTTPS server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name your-domain.com;
+
+    # SSL certificates (use certbot to generate)
+    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+
+    # SSL configuration (Mozilla Intermediate)
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Security headers
+    add_header Strict-Transport-Security "max-age=63072000" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+
+    # Request size limit (match Flask config)
+    client_max_body_size 1M;
+
+    # Timeouts
+    proxy_connect_timeout 35s;
+    proxy_send_timeout 35s;
+    proxy_read_timeout 35s;
+
+    # Access log
+    access_log /var/log/nginx/webhook-edge-access.log;
+    error_log /var/log/nginx/webhook-edge-error.log;
+
+    location / {
+        proxy_pass http://webhook_edge;
+        proxy_http_version 1.1;
+        
+        # Forward real client IP
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        
+        # Disable buffering for real-time responses
+        proxy_buffering off;
+    }
+
+    # Health check (optional: restrict to localhost only)
+    location /health {
+        proxy_pass http://webhook_edge/health;
+        access_log off;
+    }
+}
+
+# Rate limiting (optional but recommended)
+# Add to http block in /etc/nginx/nginx.conf:
+#
+# limit_req_zone $binary_remote_addr zone=webhook_limit:10m rate=10r/s;
+#
+# Then add inside the location / block above:
+# limit_req zone=webhook_limit burst=20 nodelay;
