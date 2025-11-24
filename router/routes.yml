@@ -10,14 +10,14 @@ destinations:
   # Path is likely /wiki/upsert based on your service; change if your FastAPI uses /pages/upsert instead.  # VERIFY
   wikimgr.upsert_page:
     method: POST
-    url: http://192.168.50.208:8080/pages/upsert   # VERIFY path
+    url: http://192.168.50.208:8080/pages/upsert # VERIFY path
     auth_env: DEST_WIKIMGR_SECRET
     timeout_seconds: 15
 
   # Optional: a lightweight healthcheck for the wikimgr service (handy for router warmups)  # optional
   wikimgr.health:
     method: GET
-    url: http://192.168.50.208:8000/health        # VERIFY path
+    url: http://192.168.50.208:8000/health # VERIFY path
     timeout_seconds: 5
 
   # --- Slack Ingest (GPU VM) ---
@@ -28,6 +28,14 @@ destinations:
     auth_env: SLACK_INGEST_TOKEN
     timeout_seconds: 10
 
+    # --- New JPL (GPU VM) ---
+  jpl:
+    method: POST
+    url: http://192.168.50.201:6060/new-jpl
+    secret_env: DEST_JPL_SECRET
+    auth_env: JPL_TOKEN
+    timeout_seconds: 10
+
   ################################################################################
   # --- Additional Example Destinations ---
   ################################################################################
@@ -36,7 +44,7 @@ destinations:
   github-handler:
     method: POST
     url: http://192.168.1.50:3000/webhooks/github
-    auth_env: GITHUB_SERVICE_TOKEN  # Optional: references env var
+    auth_env: GITHUB_SERVICE_TOKEN # Optional: references env var
     timeout_seconds: 25
 
   # Example: Home Assistant webhook
