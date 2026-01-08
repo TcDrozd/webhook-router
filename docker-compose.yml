@@ -5,22 +5,21 @@ services:
     build: ./edge
     container_name: webhook-edge
     ports:
-      - "8080:8080"
+      - "8090:8080"
     env_file:
       - ./edge/.env
     environment:
       - ROUTER_URL=http://router:8080/ingest
-    depends_on:
-      - router
     restart: unless-stopped
     networks:
       - webhook-net
 
   router:
+    profiles: ["router"]   # only runs when explicitly enabled
     build: ./router
     container_name: webhook-router
     ports:
-      - "8081:8080"
+      - "8091:8080"
     env_file:
       - ./router/.env
     restart: unless-stopped
