@@ -28,7 +28,7 @@ destinations:
     auth_env: SLACK_INGEST_TOKEN
     timeout_seconds: 10
 
-    # --- New JPL (GPU VM) ---
+  # --- New JPL (GPU VM) ---
   jpl:
     method: POST
     url: http://192.168.50.201:6060/new-jpl
@@ -64,4 +64,20 @@ destinations:
   status-checker:
     method: GET
     url: http://192.168.1.80:8000/status
+    timeout_seconds: 5
+
+  ################################################################################
+  # --- Most-Recent (frame) ---
+  ################################################################################
+
+  # --- Frame manifest publisher (frame LXC) ---
+  frame.publish_manifest:
+    method: POST
+    url: http://192.168.50.214:5000/publish
+    auth_env: DEST_FRAME_PUBLISH_TOKEN
+    timeout_seconds: 300
+
+  frame.health:
+    method: GET
+    url: http://192.168.50.214:5000/health
     timeout_seconds: 5
