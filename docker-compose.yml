@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   edge:
+    profiles: ["edge"]  # only runs when explicitly enabled
     build: ./edge
     container_name: webhook-edge
     ports:
