@@ -4,7 +4,7 @@ edge/.env
 router/.env
 
 # Route configuration (may contain internal IPs)
-router/routes.yaml
+router/routes.yml
 
 # Python
 __pycache__/

@@ -1,0 +1,67 @@
+destinations:
+  # --- Wiki Manager (FastAPI on wiki LXC) ---
+  wikimgr.append_log:
+    method: POST
+    url: http://192.168.1.100:8000/logs/captured-links  # Replace with your Wiki Manager IP/port
+    auth_env: DEST_WIKIMGR_SECRET  # Set this env var in .env
+    timeout_seconds: 10
+
+  # Upsert a Wiki.js page (JSON body with path/title/content)
+  # Path is likely /wiki/upsert based on your service; change if your FastAPI uses /pages/upsert instead.
+  wikimgr.upsert_page:
+    method: POST
+    url: http://192.168.1.100:8080/pages/upsert  # Replace with your Wiki Manager IP/port
+    auth_env: DEST_WIKIMGR_SECRET  # Set this env var in .env
+    timeout_seconds: 15
+
+  # Optional: a lightweight healthcheck for the wikimgr service (handy for router warmups)
+  wikimgr.health:
+    method: GET
+    url: http://192.168.1.100:8000/health  # Replace with your Wiki Manager IP/port
+    timeout_seconds: 5
+
+  # --- Slack Ingest (GPU VM) ---
+  slack.ingest:
+    method: POST
+    url: http://192.168.1.101:6090/ingest/slack  # Replace with your Slack ingest IP/port
+    secret_env: DEST_SLACK_INGEST_SECRET  # Currently unused in code, may be for future use
+    auth_env: SLACK_INGEST_TOKEN  # Set this env var in .env
+    timeout_seconds: 10
+
+  # --- New JPL (GPU VM) ---
+  jpl:
+    method: POST
+    url: http://192.168.1.101:6060/new-jpl  # Replace with your JPL service IP/port
+    secret_env: DEST_JPL_SECRET  # Currently unused in code, may be for future use
+    auth_env: JPL_TOKEN  # Set this env var in .env
+    timeout_seconds: 10
+
+  ################################################################################
+  # --- Additional Example Destinations ---
+  ################################################################################
+
+  # Example: GitHub webhook handler
+  github-handler:
+    method: POST
+    url: http://192.168.1.50:3000/webhooks/github  # Replace with your GitHub handler IP/port
+    auth_env: GITHUB_SERVICE_TOKEN  # Optional: set this env var in .env if needed
+    timeout_seconds: 25
+
+  # Example: Home Assistant webhook
+  home-assistant:
+    method: POST
+    url: http://192.168.1.100:8123/api/webhook/my-webhook-id  # Replace with your HA IP/port/webhook-id
+    timeout_seconds: 10
+    # No auth_env means no Authorization header will be sent
+
+  # Example: Custom service without auth
+  custom-service:
+    method: POST
+    url: http://192.168.1.75:5000/events  # Replace with your custom service IP/port
+    timeout_seconds: 20
+
+  # Example: Service with different HTTP method
+  status-checker:
+    method: GET
+    url: http://192.168.1.80:8000/status  # Replace with your status service IP/port
+    timeout_seconds: 5
