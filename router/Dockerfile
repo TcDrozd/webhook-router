@@ -20,6 +20,6 @@ ENV PYTHONPATH=/app
 RUN useradd -m -u 1000 webhook && chown -R webhook:webhook /app
 USER webhook
 
-EXPOSE 8080
+EXPOSE 8091
 
 CMD ["python", "app.py"]
