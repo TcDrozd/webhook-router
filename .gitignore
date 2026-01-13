@@ -2,6 +2,7 @@
 .env
 edge/.env
 router/.env
+.env.backup
 
 # Route configuration (may contain internal IPs)
 router/routes.yml

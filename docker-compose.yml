@@ -10,7 +10,7 @@ services:
     env_file:
       - ./edge/.env
     environment:
-      - ROUTER_URL=http://router:8080/ingest
+      - ROUTER_URL=http://100.104.107.106:8080/ingest
     restart: unless-stopped
     networks:
       - webhook-net
