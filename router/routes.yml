@@ -77,3 +77,22 @@ destinations:
     method: GET
     url: http://192.168.50.100/api/latest?user=Trevor
     timeout_seconds: 10
+
+  ## medcheck
+  # --- Med Check service ---
+  medcheck.taken:
+    method: POST
+    url: http://192.168.50.203:5055/api/taken
+    auth_env: MEDCHECK_TOKEN
+    timeout_seconds: 5
+
+  medcheck.reset:
+    method: POST
+    url: http://192.168.50.203:5055/api/reset
+    auth_env: MEDCHECK_TOKEN
+    timeout_seconds: 5
+
+  medcheck.status:
+    method: GET
+    url: http://192.168.50.203:5055/api/status
+    timeout_seconds: 5
