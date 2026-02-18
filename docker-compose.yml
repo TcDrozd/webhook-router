@@ -7,10 +7,12 @@ services:
     container_name: webhook-edge
     ports:
       - "8090:8080"
+    volumes:
+      - /Users/tdrozd/.secrets/webhook-router/edge_keys.json:/run/secrets/edge_keys.json:ro
     env_file:
       - ./edge/.env
     environment:
-      - ROUTER_URL=http://100.104.107.106:8080/ingest
+      - EDGE_KEYS_FILE=/run/secrets/edge_keys.json
     restart: unless-stopped
     networks:
       - webhook-net

@@ -37,37 +37,7 @@ destinations:
     timeout_seconds: 10
 
   ################################################################################
-  # --- Additional Example Destinations ---
-  ################################################################################
-
-  # Example: GitHub webhook handler
-  github-handler:
-    method: POST
-    url: http://192.168.1.50:3000/webhooks/github
-    auth_env: GITHUB_SERVICE_TOKEN # Optional: references env var
-    timeout_seconds: 25
-
-  # Example: Home Assistant webhook
-  home-assistant:
-    method: POST
-    url: http://192.168.1.100:8123/api/webhook/my-webhook-id
-    timeout_seconds: 10
-    # No auth_env means no Authorization header will be sent
-
-  # Example: Custom service without auth
-  custom-service:
-    method: POST
-    url: http://192.168.1.75:5000/events
-    timeout_seconds: 20
-
-  # Example: Service with different HTTP method
-  status-checker:
-    method: GET
-    url: http://192.168.1.80:8000/status
-    timeout_seconds: 5
-
-  ################################################################################
-  # --- Most-Recent (frame) ---
+  # --- Most-Recent ---
   ################################################################################
 
   # --- Frame manifest publisher (frame LXC) ---
@@ -81,3 +51,29 @@ destinations:
     method: GET
     url: http://192.168.50.214:5000/health
     timeout_seconds: 5
+
+  # --- Dogwalk API ---
+  dogwalk.add:
+    method: POST
+    url: http://192.168.50.100/api/add
+    timeout_seconds: 10
+
+  dogwalk.walks:
+    method: GET
+    url: http://192.168.50.100/api/walks
+    timeout_seconds: 10
+
+  dogwalk.latest:
+    method: GET
+    url: http://192.168.50.100/api/latest
+    timeout_seconds: 10
+
+  dogwalk.walks.trevor:
+    method: GET
+    url: http://192.168.50.100/api/walks?user=Trevor
+    timeout_seconds: 10
+
+  dogwalk.latest.trevor:
+    method: GET
+    url: http://192.168.50.100/api/latest?user=Trevor
+    timeout_seconds: 10
