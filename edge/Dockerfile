@@ -21,4 +21,4 @@ USER webhook
 
 EXPOSE 8080
 
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--workers", "2", "--threads", "4", "-b", "0.0.0.0:8080", "app:app"]
