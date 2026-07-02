@@ -3,6 +3,7 @@
 edge/.env
 router/.env
 .env.backup
+secrets/edge_keys.json
 
 # Route configuration (may contain internal IPs)
 router/routes.yml
@@ -51,3 +52,4 @@ docker-compose.override.yml
 
 # Test artifacts
 /tmp/
+docker-compose.yml
