@@ -20,6 +20,7 @@ ENV PYTHONPATH=/app
 RUN useradd -m -u 1000 webhook && chown -R webhook:webhook /app
 USER webhook
 
-EXPOSE 8091
+# Container port, matching the compose mapping and router/app.py's dev server.
+EXPOSE 8080
 
-CMD ["gunicorn", "--workers", "2", "--threads", "4", "-b", "0.0.0.0:8081", "app:app"]
+CMD ["gunicorn", "--workers", "2", "--threads", "4", "-b", "0.0.0.0:8080", "app:app"]

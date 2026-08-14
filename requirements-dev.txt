@@ -1,0 +1,6 @@
+# Test dependencies. The runtime dependencies live in edge/requirements.txt
+# and router/requirements.txt; install those too when running the suite:
+#
+#   pip install -r requirements-dev.txt -r edge/requirements.txt -r router/requirements.txt
+#
+pytest==8.3.4

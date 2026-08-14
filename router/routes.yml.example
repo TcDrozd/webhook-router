@@ -36,6 +36,17 @@ destinations:
     auth_env: JPL_TOKEN  # Set this env var in .env
     timeout_seconds: 10
 
+  # --- Tailscale webhook events ---
+  # The edge's /tailscale adapter verifies Tailscale's signature and forwards
+  # the event batch here under this destination name. Nothing about Tailscale
+  # is special to the router: this is an ordinary destination, and the payload
+  # is the JSON array of events exactly as Tailscale sent it.
+  tailscale:
+    method: POST
+    url: http://192.168.1.101:9000/hooks/tailscale  # Replace with your handler IP/port
+    auth_env: DEST_TAILSCALE_TOKEN  # Optional: set this env var in .env if needed
+    timeout_seconds: 10
+
   ################################################################################
   # --- Additional Example Destinations ---
   ################################################################################

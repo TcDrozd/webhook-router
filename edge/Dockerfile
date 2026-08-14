@@ -12,6 +12,7 @@ COPY logging_utils.py .
 COPY config ./config
 COPY services ./services
 COPY http_handlers ./http_handlers
+COPY adapters ./adapters
 
 ENV PYTHONPATH=/app
 

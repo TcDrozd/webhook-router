@@ -24,7 +24,7 @@ services:
     ports:
       - "8091:8080" # Bind to ts IP
     volumes:
-      - ./routes.yml:/app/routes.yml:ro
+      - ./router/routes.yml:/app/routes.yml:ro
     env_file:
       - ./router/.env
     restart: unless-stopped

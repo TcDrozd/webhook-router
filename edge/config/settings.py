@@ -14,6 +14,9 @@ class EdgeConfig:
     max_body_size_mb: int
     rate_limit_per_minute: int
     edge_keys: Dict[str, str]  # token -> owner
+    # Optional: when unset, /tailscale returns 503 but the edge still serves
+    # native ingress. Never forwarded to the router.
+    tailscale_webhook_secret: str = ''
 
 
 def _load_edge_keys_from_file(logger: Logger) -> Dict[str, str]:
@@ -88,6 +91,7 @@ def load_edge_config(logger: Logger) -> EdgeConfig:
     request_timeout = int(os.getenv("REQUEST_TIMEOUT", "30"))
     max_body_size_mb = int(os.getenv("MAX_BODY_SIZE_MB", "1"))
     rate_limit_per_minute = int(os.getenv("RATE_LIMIT_PER_MINUTE", "100"))
+    tailscale_webhook_secret = os.getenv("TAILSCALE_WEBHOOK_SECRET", "").strip()
 
     edge_keys = _load_edge_keys_from_file(logger)
 
@@ -102,4 +106,5 @@ def load_edge_config(logger: Logger) -> EdgeConfig:
         max_body_size_mb=max_body_size_mb,
         rate_limit_per_minute=rate_limit_per_minute,
         edge_keys=edge_keys,
+        tailscale_webhook_secret=tailscale_webhook_secret,
     )

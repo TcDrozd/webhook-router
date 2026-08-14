@@ -37,6 +37,11 @@ def create_app() -> Flask:
     logger.info('Router URL: %s', config.router_url)
     logger.info('Request timeout: %ss', config.request_timeout)
 
+    if config.tailscale_webhook_secret:
+        logger.info('Tailscale ingress enabled at /tailscale')
+    else:
+        logger.warning('TAILSCALE_WEBHOOK_SECRET not set - /tailscale will return 503')
+
     return app
 
 
